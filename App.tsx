@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
-  
+
   const poetDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,9 +37,9 @@ const App: React.FC = () => {
         const userPoetry: Poetry[] = saved ? JSON.parse(saved) : [];
         const combined = [...userPoetry, ...initialData];
         const sorted = [...combined].sort((a, b) => {
-           if (a.poet === 'Kunal' && b.poet !== 'Kunal') return -1;
-           if (a.poet !== 'Kunal' && b.poet === 'Kunal') return 1;
-           return 0;
+          if (a.poet === 'Kunal' && b.poet !== 'Kunal') return -1;
+          if (a.poet !== 'Kunal' && b.poet === 'Kunal') return 1;
+          return 0;
         });
         setAllPoetry(sorted);
 
@@ -51,7 +51,7 @@ const App: React.FC = () => {
         setAllPoetry(initialData);
       }
     };
-    
+
     loadData();
   }, []);
 
@@ -84,16 +84,16 @@ const App: React.FC = () => {
       const content = (item.text || '').toLowerCase();
       const author = (item.poet || '').toLowerCase();
       const query = searchTerm.toLowerCase();
-      
+
       const matchesSearch = author.includes(query) || content.includes(query);
-      
+
       let matchesType = false;
       if (filterType === 'all') matchesType = true;
       else if (filterType === 'favorites') matchesType = favorites.has(item.id);
       else matchesType = item.type === filterType;
 
       const matchesPoet = filterPoet === 'all' || item.poet === filterPoet;
-      
+
       return matchesSearch && matchesType && matchesPoet;
     });
   }, [allPoetry, searchTerm, filterType, filterPoet, favorites]);
@@ -122,7 +122,7 @@ const App: React.FC = () => {
     } catch (e) {
       console.warn("Storage quota exceeded", e);
     }
-    
+
     setAllPoetry(prev => [poemWithId, ...prev]);
     setIsFormOpen(false);
   };
@@ -150,8 +150,8 @@ const App: React.FC = () => {
       <div className="blob bg-[#6A8C70] w-80 h-80 bottom-[10%] left-[5%]"></div>
 
       <header className="w-full max-w-5xl mx-auto px-6 pt-10 flex justify-between items-center z-50">
-        <div 
-          className="flex items-center gap-3 cursor-pointer group" 
+        <div
+          className="flex items-center gap-3 cursor-pointer group"
           onClick={() => {
             setFilterType('all');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -162,18 +162,18 @@ const App: React.FC = () => {
           </div>
           <h1 className="text-xl font-medium text-[#E5E1D8] tracking-tight">Apana Kagaz</h1>
         </div>
-        
+
         <div className="flex items-center gap-3">
-          <a 
-            href="https://github.com" 
-            target="_blank" 
+          <a
+            href="https://github.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="w-10 h-10 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-[#8C867E] hover:text-[#C9A46A] hover:border-[#C9A46A]/40 transition-all duration-300"
             title="GitHub Repository"
           >
             <Github size={18} />
           </a>
-          <button 
+          <button
             onClick={() => setIsFormOpen(true)}
             className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A46A] text-black rounded-full hover:bg-[#B8965E] transition-all shadow-lg shadow-[#C9A46A]/10 font-inter text-xs font-semibold uppercase tracking-widest"
           >
@@ -203,9 +203,9 @@ const App: React.FC = () => {
         <div className="bg-[#1C1A19]/60 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/5 shadow-2xl shadow-black/40 flex flex-col md:flex-row gap-8 items-center justify-between">
           <div className="relative w-full md:w-64 group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C9A46A]/60" size={16} />
-            <input 
-              type="text" 
-              placeholder="Talash karein..." 
+            <input
+              type="text"
+              placeholder="Talash karein..."
               className="pl-12 pr-4 w-full py-2.5 bg-[#121110] border border-white/5 rounded-full text-sm focus:outline-none focus:ring-4 focus:ring-[#C9A46A]/5 transition-all text-[#E5E1D8] placeholder:text-[#8C867E]/50"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -237,18 +237,18 @@ const App: React.FC = () => {
             {isPoetDropdownOpen && (
               <div className="absolute top-full left-0 right-0 mt-3 bg-[#1C1A19] border border-white/10 rounded-[2rem] shadow-2xl z-[70] overflow-hidden animate-[fadeIn_0.2s_ease-out]">
                 <div className="p-3 border-b border-white/5">
-                   <div className="relative">
-                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C9A46A]/40" size={12} />
-                     <input
-                       autoFocus
-                       type="text"
-                       placeholder="Shayer dhoondein..."
-                       className="w-full pl-8 pr-3 py-2 bg-[#121110] rounded-full text-[11px] focus:outline-none border-none font-inter text-[#E5E1D8]"
-                       value={poetSearchTerm}
-                       onChange={(e) => setPoetSearchTerm(e.target.value)}
-                       onClick={(e) => e.stopPropagation()}
-                     />
-                   </div>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C9A46A]/40" size={12} />
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Shayer dhoondein..."
+                      className="w-full pl-8 pr-3 py-2 bg-[#121110] rounded-full text-[11px] focus:outline-none border-none font-inter text-[#E5E1D8]"
+                      value={poetSearchTerm}
+                      onChange={(e) => setPoetSearchTerm(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
                 </div>
                 <div className="max-h-60 overflow-y-auto no-scrollbar py-2">
                   <button
@@ -282,14 +282,14 @@ const App: React.FC = () => {
         {displayPoetry.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {displayPoetry.map((item, idx) => (
-              <div 
-                key={item.id} 
+              <div
+                key={item.id}
                 className="animate-[slideUp_0.8s_ease-out]"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <PoetryCard 
-                  poetry={item} 
-                  index={idx} 
+                <PoetryCard
+                  poetry={item}
+                  index={idx}
                   isFavorite={favorites.has(item.id)}
                   onToggleFavorite={() => toggleFavorite(item.id)}
                 />
@@ -304,15 +304,15 @@ const App: React.FC = () => {
 
         <div className="flex flex-col items-center gap-12 mt-16">
           {displayPoetry.length < filteredPoetry.length && (
-            <button 
+            <button
               onClick={() => setPage(p => p + 1)}
               className="px-10 py-4 bg-white/5 border border-[#C9A46A]/30 text-[#C9A46A] text-[10px] uppercase tracking-[0.3em] font-bold rounded-full hover:bg-[#C9A46A] hover:text-black transition-all duration-500 shadow-lg shadow-black/20 active:scale-95"
             >
               Aur Padhiein
             </button>
           )}
-          
-          <button 
+
+          <button
             onClick={handleRefresh}
             className="flex items-center gap-2 text-[#8C867E]/60 hover:text-[#C9A46A] transition-all text-[10px] uppercase tracking-[0.2em] font-bold group"
           >
@@ -325,31 +325,31 @@ const App: React.FC = () => {
       <footer className="mt-24 w-full py-12 text-center border-t border-white/5">
         <p className="text-[#E5E1D8] font-serif text-2xl italic mb-4">Apana Kagaz</p>
         <div className="flex justify-center items-center gap-6 mb-4">
-           <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[#8C867E]/40 hover:text-[#C9A46A] transition-colors">
-             <Github size={20} />
-           </a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[#8C867E]/40 hover:text-[#C9A46A] transition-colors">
+            <Github size={20} />
+          </a>
         </div>
         <p className="text-[#8C867E]/40 text-[9px] tracking-[0.4em] uppercase font-bold font-inter">Made for the lovers of words</p>
       </footer>
 
       {isFormOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-[fadeIn_0.3s_ease-out]"
           onClick={() => setIsFormOpen(false)}
         >
-          <div 
+          <div
             className="bg-[#1C1A19] w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden relative border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
-             <button onClick={() => setIsFormOpen(false)} className="absolute top-8 right-8 text-[#8C867E]/40 hover:text-[#E5E1D8] transition-all p-2 bg-white/5 rounded-full hover:bg-white/10">
-               <X size={20} />
-             </button>
-             <div className="p-12 md:p-16">
-                <div className="w-10 h-1 bg-[#C9A46A]/30 rounded-full mb-8"></div>
-                <h3 className="text-3xl font-serif mb-3 text-[#E5E1D8]">Kalam Uthayein</h3>
-                <p className="text-[#8C867E] mb-12 text-sm italic">Lafzon ko bayaan hone dijiye.</p>
-                <PoetryForm onSubmit={handleAddPoetry} onCancel={() => setIsFormOpen(false)} />
-             </div>
+            <button onClick={() => setIsFormOpen(false)} className="absolute top-8 right-8 text-[#8C867E]/40 hover:text-[#E5E1D8] transition-all p-2 bg-white/5 rounded-full hover:bg-white/10">
+              <X size={20} />
+            </button>
+            <div className="p-12 md:p-16">
+              <div className="w-10 h-1 bg-[#C9A46A]/30 rounded-full mb-8"></div>
+              <h3 className="text-3xl font-serif mb-3 text-[#E5E1D8]">Kalam Uthayein</h3>
+              <p className="text-[#8C867E] mb-12 text-sm italic">Lafzon ko bayaan hone dijiye.</p>
+              <PoetryForm onSubmit={handleAddPoetry} onCancel={() => setIsFormOpen(false)} />
+            </div>
           </div>
         </div>
       )}
