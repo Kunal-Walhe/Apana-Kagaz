@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apana Kagaz - Sukhan-e-Dil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --color-bg: #121110;
+        --color-card-1: #1C1A19;
+        --color-card-2: #1A191C;
+        --color-card-3: #191C1A;
+        --color-card-4: #1C1B19;
+        --color-text: #E5E1D8;
+        --color-text-muted: #8C867E;
+        --color-accent: #C9A46A;
+      }
+      body {
+        font-family: 'Lora', serif;
+        background-color: var(--color-bg);
+        margin: 0;
+        padding: 0;
+        color: var(--color-text);
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+      h1, h2, h3 {
+        font-family: 'Playfair Display', serif;
+      }
+      .font-inter { font-family: 'Inter', sans-serif; }
+      
+      /* Subtle artistic blobs adjusted for dark mode */
+      .blob {
+        position: absolute;
+        filter: blur(100px);
+        z-index: -1;
+        border-radius: 50%;
+        opacity: 0.15;
+        animation: float 25s infinite alternate ease-in-out;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(60px, 120px) scale(1.2); }
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--color-bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #2D2926;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-accent);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.460.0",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react/": "https://esm.sh/react@19.0.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
