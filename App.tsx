@@ -4,6 +4,7 @@ import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart, Githu
 import { Poetry, PoetryType } from './types';
 import PoetryCard from './components/PoetryCard';
 import PoetryForm from './components/PoetryForm';
+import { initialPoetryData } from './data';
 
 const App: React.FC = () => {
   const [allPoetry, setAllPoetry] = useState<Poetry[]>([]);
@@ -22,15 +23,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      let initialData: Poetry[] = [];
-      try {
-        const response = await fetch('./data.json');
-        if (response.ok) {
-          initialData = await response.json();
-        }
-      } catch (err) {
-        console.error("Failed to load data.json", err);
-      }
+      let initialData: Poetry[] = initialPoetryData;
 
       try {
         const saved = localStorage.getItem('user_poetry');
