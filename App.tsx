@@ -4,7 +4,7 @@ import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart, Githu
 import { Poetry, PoetryType } from './types';
 import PoetryCard from './components/PoetryCard';
 import PoetryForm from './components/PoetryForm';
-import { supabase } from './supabase';
+import { initialPoetryData } from './data';
 
 const App: React.FC = () => {
   const [allPoetry, setAllPoetry] = useState<Poetry[]>([]);
@@ -23,22 +23,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      let initialData: Poetry[] = [];
+      let initialData: Poetry[] = initialPoetryData;
 
       try {
-        const { data, error } = await supabase.from('shayari_entry').select('*');
-        if (error) {
-          console.error("Error fetching data from Supabase:", error);
-        } else if (data) {
-          initialData = data.map((item: any) => ({
-            id: item.id,
-            poet: item.poet,
-            type: item.type,
-            text: item.text,
-            createdAt: new Date(item.created_at).getTime()
-          }));
-        }
-
         const saved = localStorage.getItem('user_poetry');
         const userPoetry: Poetry[] = saved ? JSON.parse(saved) : [];
         const combined = [...userPoetry, ...initialData];
@@ -55,7 +42,6 @@ const App: React.FC = () => {
         }
       } catch (e) {
         setAllPoetry(initialData);
-        console.error("Error loading data:", e);
       }
     };
 
