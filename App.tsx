@@ -120,6 +120,7 @@ const App: React.FC = () => {
         .from('Shayari_Entries')
         .insert([
           {
+            id: Date.now(), // Generating a unique bigint ID manually as the database expects one
             poet: newPoem.poet,
             type: newPoem.type,
             text: newPoem.text
