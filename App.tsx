@@ -26,7 +26,7 @@ const App: React.FC = () => {
       let initialData: Poetry[] = [];
 
       try {
-        const { data, error } = await supabase.from('shayari_entry').select('*');
+        const { data, error } = await supabase.from('Shayari_Entries').select('*');
         if (error) {
           console.error("Error fetching data from Supabase:", error);
         } else if (data) {
