@@ -4,7 +4,7 @@ import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart } from
 import { Poetry, PoetryType } from './types';
 import PoetryCard from './components/PoetryCard';
 import PoetryForm from './components/PoetryForm';
-import { initialPoetryData } from './data';
+import { supabase } from './supabase';
 
 const App: React.FC = () => {
   const [allPoetry, setAllPoetry] = useState<Poetry[]>([]);
@@ -23,9 +23,22 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      let initialData: Poetry[] = initialPoetryData;
+      let initialData: Poetry[] = [];
 
       try {
+        const { data, error } = await supabase.from('shayari_entry').select('*');
+        if (error) {
+          console.error("Error fetching data from Supabase:", error);
+        } else if (data) {
+          initialData = data.map((item: any) => ({
+            id: item.id,
+            poet: item.poet,
+            type: item.type,
+            text: item.text,
+            createdAt: new Date(item.created_at).getTime()
+          }));
+        }
+
         const saved = localStorage.getItem('user_poetry');
         const userPoetry: Poetry[] = saved ? JSON.parse(saved) : [];
         const combined = [...userPoetry, ...initialData];
@@ -42,6 +55,7 @@ const App: React.FC = () => {
         }
       } catch (e) {
         setAllPoetry(initialData);
+        console.error("Error loading data:", e);
       }
     };
 
@@ -99,25 +113,43 @@ const App: React.FC = () => {
     setPage(1);
   }, [searchTerm, filterType, filterPoet]);
 
-  const handleAddPoetry = (newPoem: Omit<Poetry, 'id'>) => {
-    const poemWithId: Poetry = {
-      ...newPoem,
-      id: `user-${Date.now()}`,
-      isUserAdded: true,
-      createdAt: Date.now()
-    };
-
+  const handleAddPoetry = async (newPoem: Omit<Poetry, 'id'>) => {
     try {
-      const saved = localStorage.getItem('user_poetry');
-      const currentList: Poetry[] = saved ? JSON.parse(saved) : [];
-      const newList = [poemWithId, ...currentList];
-      localStorage.setItem('user_poetry', JSON.stringify(newList));
-    } catch (e) {
-      console.warn("Storage quota exceeded", e);
-    }
+      // Save directly to Supabase
+      const { data, error } = await supabase
+        .from('Shayari_Entries')
+        .insert([
+          {
+            poet: newPoem.poet,
+            type: newPoem.type,
+            text: newPoem.text
+          }
+        ])
+        .select();
 
-    setAllPoetry(prev => [poemWithId, ...prev]);
-    setIsFormOpen(false);
+      if (error) {
+        console.error("Error saving to Supabase:", error);
+        alert("Server pe save karne mein masla hua. Dobara koshish karein.");
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const insertedItem = data[0];
+        const poemWithId: Poetry = {
+          id: insertedItem.id,
+          poet: insertedItem.poet,
+          type: insertedItem.type,
+          text: insertedItem.text,
+          createdAt: new Date(insertedItem.created_at).getTime(),
+          isUserAdded: true
+        };
+
+        setAllPoetry(prev => [poemWithId, ...prev]);
+        setIsFormOpen(false);
+      }
+    } catch (e) {
+      console.error("Unknown error saving poetry:", e);
+    }
   };
 
   const handleRefresh = () => {
