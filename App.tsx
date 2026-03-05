@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart, Github } from 'lucide-react';
+import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart } from 'lucide-react';
 import { Poetry, PoetryType } from './types';
 import PoetryCard from './components/PoetryCard';
 import PoetryForm from './components/PoetryForm';
@@ -157,15 +157,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-[#8C867E] hover:text-[#C9A46A] hover:border-[#C9A46A]/40 transition-all duration-300"
-            title="GitHub Repository"
-          >
-            <Github size={18} />
-          </a>
+
           <button
             onClick={() => setIsFormOpen(true)}
             className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A46A] text-black rounded-full hover:bg-[#B8965E] transition-all shadow-lg shadow-[#C9A46A]/10 font-inter text-xs font-semibold uppercase tracking-widest"
@@ -317,11 +309,7 @@ const App: React.FC = () => {
 
       <footer className="mt-24 w-full py-12 text-center border-t border-white/5">
         <p className="text-[#E5E1D8] font-serif text-2xl italic mb-4">Apana Kagaz</p>
-        <div className="flex justify-center items-center gap-6 mb-4">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[#8C867E]/40 hover:text-[#C9A46A] transition-colors">
-            <Github size={20} />
-          </a>
-        </div>
+
         <p className="text-[#8C867E]/40 text-[9px] tracking-[0.4em] uppercase font-bold font-inter">Made for the lovers of words</p>
       </footer>
 
