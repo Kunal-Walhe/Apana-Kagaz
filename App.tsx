@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const [poetSearchTerm, setPoetSearchTerm] = useState('');
   const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
   const [page, setPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 10;
 
   const poetDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -42,19 +42,18 @@ const App: React.FC = () => {
         const saved = localStorage.getItem('user_poetry');
         const userPoetry: Poetry[] = saved ? JSON.parse(saved) : [];
         const combined = [...userPoetry, ...initialData];
-        const sorted = [...combined].sort((a, b) => {
-          if (a.poet === 'Kunal' && b.poet !== 'Kunal') return -1;
-          if (a.poet !== 'Kunal' && b.poet === 'Kunal') return 1;
-          return 0;
-        });
-        setAllPoetry(sorted);
+
+        // Shuffle the array randomly
+        const shuffled = combined.sort(() => Math.random() - 0.5);
+
+        setAllPoetry(shuffled);
 
         const savedFavs = localStorage.getItem('user_favorites');
         if (savedFavs) {
           setFavorites(new Set(JSON.parse(savedFavs)));
         }
       } catch (e) {
-        setAllPoetry(initialData);
+        setAllPoetry(initialData.sort(() => Math.random() - 0.5));
         console.error("Error loading data:", e);
       }
     };
