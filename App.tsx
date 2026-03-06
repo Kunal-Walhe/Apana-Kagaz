@@ -16,10 +16,48 @@ const App: React.FC = () => {
   const [isPoetDropdownOpen, setIsPoetDropdownOpen] = useState(false);
   const [poetSearchTerm, setPoetSearchTerm] = useState('');
   const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
+  const [userId, setUserId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
   const poetDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+
+        let currentUserId = session?.user?.id;
+
+        if (!currentUserId) {
+          const { data, error } = await supabase.auth.signInAnonymously();
+          if (error) throw error;
+          currentUserId = data?.user?.id;
+        }
+
+        if (currentUserId) {
+          setUserId(currentUserId);
+
+          const { data: favs } = await supabase
+            .from('Favorite_Shayries')
+            .select('shayari_id')
+            .eq('user_id', currentUserId);
+
+          if (favs) {
+            setFavorites(prev => {
+              const next = new Set(prev);
+              favs.forEach(f => next.add(f.shayari_id));
+              return next;
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Auth initialization error:", err);
+      }
+    };
+    initAuth();
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -158,13 +196,32 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const toggleFavorite = (id: string | number) => {
+  const toggleFavorite = async (id: string | number) => {
+    const isCurrentlyFavorite = favorites.has(id);
+
     setFavorites(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
+      if (isCurrentlyFavorite) next.delete(id);
       else next.add(id);
       return next;
     });
+
+    if (!userId) return;
+
+    try {
+      if (isCurrentlyFavorite) {
+        await supabase
+          .from('Favorite_Shayries')
+          .delete()
+          .match({ user_id: userId, shayari_id: id });
+      } else {
+        await supabase
+          .from('Favorite_Shayries')
+          .insert({ user_id: userId, shayari_id: id });
+      }
+    } catch (err) {
+      console.error("Error updating favorite in Supabase:", err);
+    }
   };
 
   return (
