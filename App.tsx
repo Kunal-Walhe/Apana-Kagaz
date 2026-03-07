@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart } from 'lucide-react';
+import { Plus, Search, RefreshCcw, BookOpen, X, ChevronDown, Check, Heart, LogIn } from 'lucide-react';
 import { Poetry, PoetryType } from './types';
 import PoetryCard from './components/PoetryCard';
 import PoetryForm from './components/PoetryForm';
+import Login from './components/Login';
 import { supabase } from './supabase';
 
 const App: React.FC = () => {
@@ -13,6 +14,7 @@ const App: React.FC = () => {
   const [filterType, setFilterType] = useState<PoetryType>('all');
   const [filterPoet, setFilterPoet] = useState<string>('all');
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPoetDropdownOpen, setIsPoetDropdownOpen] = useState(false);
   const [poetSearchTerm, setPoetSearchTerm] = useState('');
   const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
@@ -246,7 +248,13 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-
+          <button
+            onClick={() => setIsLoginOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-transparent border border-[#C9A46A]/30 text-[#C9A46A] rounded-full hover:bg-[#C9A46A]/10 transition-all font-inter text-xs font-semibold uppercase tracking-widest"
+          >
+            <LogIn size={16} />
+            <span className="hidden sm:inline">Daakhil</span>
+          </button>
           <button
             onClick={() => setIsFormOpen(true)}
             className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A46A] text-black rounded-full hover:bg-[#B8965E] transition-all shadow-lg shadow-[#C9A46A]/10 font-inter text-xs font-semibold uppercase tracking-widest"
@@ -401,6 +409,23 @@ const App: React.FC = () => {
 
         <p className="text-[#8C867E]/40 text-[9px] tracking-[0.4em] uppercase font-bold font-inter">Made for the lovers of words</p>
       </footer>
+
+      {isLoginOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-[fadeIn_0.3s_ease-out]"
+          onClick={() => setIsLoginOpen(false)}
+        >
+          <div
+            className="bg-[#1C1A19] w-full max-w-md rounded-[3rem] shadow-2xl overflow-hidden relative border border-white/10 p-10 sm:p-14"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button onClick={() => setIsLoginOpen(false)} className="absolute top-8 right-8 text-[#8C867E]/40 hover:text-[#E5E1D8] transition-all p-2 bg-white/5 rounded-full hover:bg-white/10">
+              <X size={20} />
+            </button>
+            <Login onClose={() => setIsLoginOpen(false)} />
+          </div>
+        </div>
+      )}
 
       {isFormOpen && (
         <div
